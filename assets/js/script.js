@@ -70,63 +70,27 @@ const App = createApp({
       },
     ];
 
-    const timer = ms => new Promise(res => setTimeout(res, ms));
-
     onMounted(() => {
-      let isDown = false;
-      let startX;
-      let scrollLeft;
-      const slider = document.querySelector('#slider-area');
-      let currentScroll = 0;
-      let lastScrollLeft = 0;
-
-      let myTimer = setInterval(async function () {
-        currentScroll += 400;
-        if(currentScroll > 2424) {
-          $('#slider-area').animate({
-            scrollRight: 0
-          }, "slow");
-          lastScrollLeft = 0;
-          currentScroll = 0;
+      $('.owl-carousel').owlCarousel({
+        autoplay:true,
+        autoplayTimeout:5000,
+        autoplayHoverPause:true,
+        loop: true,
+        responsiveClass: true,
+        responsive:{
+          0:{
+            items:1
+          },
+          600:{
+            items:3,
+            nav:false
+          },
+          1000:{
+            items:3,
+            nav:false
+          }
         }
-        $('#slider-area').animate({
-          scrollLeft: currentScroll
-        }, "slow");
-        lastScrollLeft = currentScroll;
-      }, 2000);
-
-      const end = () => {
-        isDown = false;
-        slider.classList.remove('slider-active');
-      }
-
-      const start = (e) => {
-        isDown = true;
-        slider.classList.add('slider-active');
-        startX = e.pageX || e.touches[0].pageX - slider.offsetLeft;
-        scrollLeft = slider.scrollLeft;	
-      }
-
-      const move = (e) => {
-        if(!isDown) return;
-
-        e.preventDefault();
-        const x = e.pageX || e.touches[0].pageX - slider.offsetLeft;
-        const dist = (x - startX);
-        slider.scrollLeft = scrollLeft - dist;
-      }
-
-      (() => {
-        slider.addEventListener('mousedown', start);
-        slider.addEventListener('touchstart', start);
-
-        slider.addEventListener('mousemove', move);
-        slider.addEventListener('touchmove', move);
-
-        slider.addEventListener('mouseleave', end);
-        slider.addEventListener('mouseup', end);
-        slider.addEventListener('touchend', end);
-      })();
+      });
     });
 
     return {
@@ -136,3 +100,4 @@ const App = createApp({
 });
 
 App.mount('#app')
+
